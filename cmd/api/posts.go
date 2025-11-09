@@ -22,11 +22,6 @@ func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	// if payload.Content == "" {
-	// 	app.badRequestResponse(w, r, fmt.Errorf("content is required"))
-	// 	return
-	// }
-
 	if err := Validate.Struct(payload); err != nil {
 		app.badRequestResponse(w, r, err)
 		return
@@ -73,6 +68,14 @@ func (app *application) getPostHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
+
+	comments, err := app.store.Comments.GetByPostID(ctx, id)
+	if err != nil {
+		app.internalServerError(w, r, err)
+		return
+	}
+
+	post.Comments = comments
 
 	if err := app.jsonResponse(w, http.StatusOK, post); err != nil {
 		app.internalServerError(w, r, err)
