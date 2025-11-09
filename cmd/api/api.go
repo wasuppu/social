@@ -10,9 +10,15 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+type application struct {
+	config config
+	store  store.Storage
+}
+
 type config struct {
 	addr string
 	db   dbConfig
+	env  string
 }
 
 type dbConfig struct {
@@ -20,12 +26,6 @@ type dbConfig struct {
 	maxOpenConns int
 	maxIdleConns int
 	maxIdleTime  string
-}
-
-type application struct {
-	config config
-	store  store.Storage
-	db     dbConfig
 }
 
 func (app *application) mount() http.Handler {
