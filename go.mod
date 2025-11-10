@@ -7,10 +7,11 @@ require (
 	github.com/go-playground/validator/v10 v10.28.0
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
+	github.com/sendgrid/sendgrid-go v3.16.1+incompatible
 	github.com/swaggo/http-swagger/v2 v2.0.2
 	github.com/swaggo/swag v1.16.6
 	go.uber.org/zap v1.27.0
-	github.com/sendgrid/sendgrid-go v3.16.1+incompatible
+	github.com/golang-jwt/jwt/v5 v5.3.0
 )
 
 require (
