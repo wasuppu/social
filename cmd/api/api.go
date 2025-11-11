@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"social/internal/auth"
 	"social/internal/mailer"
+	"social/internal/ratelimiter"
 	"social/internal/store"
 	"social/internal/store/cache"
 	"syscall"
@@ -30,6 +31,7 @@ type application struct {
 	logger        *zap.SugaredLogger
 	mailer        mailer.Client
 	authenticator auth.Authenticator
+	rateLimiter   ratelimiter.Limiter
 }
 
 type config struct {
@@ -41,6 +43,7 @@ type config struct {
 	frontendURL string
 	auth        authConfig
 	redisCfg    redisConfig
+	rateLimiter ratelimiter.Config
 }
 
 type redisConfig struct {
@@ -90,11 +93,13 @@ func (app *application) mount() http.Handler {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Logger)
+	r.Use(app.RateLimiterMiddleware)
 
 	r.Use(middleware.Timeout(60 * time.Second))
 
 	r.Route("/v1", func(r chi.Router) {
-		r.With(app.BasicAuthMiddleware()).Get("/health", app.healthCheckHandler)
+		r.Get("/health", app.healthCheckHandler)
+		// r.With(app.BasicAuthMiddleware()).Get("/health", app.healthCheckHandler)
 
 		docsURL := fmt.Sprintf("%s/swagger/doc.json", app.config.addr)
 		r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(docsURL)))
