@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/wasuppu/social/compare/v1.0.0...v1.1.0) (2025-11-11)
+
+
+### Features
+
+* update api version automatically ([b4337e4](https://github.com/wasuppu/social/commit/b4337e43bad7f24918077e4238e00b29275d8a1b))
+
 ## 1.0.0 (2025-11-11)
 
 
