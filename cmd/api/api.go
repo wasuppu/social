@@ -6,6 +6,8 @@ import (
 	"social/internal/auth"
 	"social/internal/mailer"
 	"social/internal/store"
+	"social/internal/store/cache"
+
 	"time"
 
 	"social/docs" // This is required to generate swagger docs
@@ -19,6 +21,7 @@ import (
 type application struct {
 	config        config
 	store         store.Storage
+	cacheStorage  cache.Storage
 	logger        *zap.SugaredLogger
 	mailer        mailer.Client
 	authenticator auth.Authenticator
@@ -32,6 +35,14 @@ type config struct {
 	mail        mailConfig
 	frontendURL string
 	auth        authConfig
+	redisCfg    redisConfig
+}
+
+type redisConfig struct {
+	addr    string
+	pw      string
+	db      int
+	enabled bool
 }
 
 type authConfig struct {
